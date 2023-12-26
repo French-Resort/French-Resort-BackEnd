@@ -1,5 +1,5 @@
-from sharedModes import db
-from User import User
+from models.alchemy import db
+from models.User import User
 
 class Guest(User):
     __tablename__ = 'guest'

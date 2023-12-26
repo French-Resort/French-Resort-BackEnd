@@ -1,4 +1,4 @@
-from sharedModes import db
+from models.alchemy import db
 
 class Booking(db.Model):
     __tablename__ = 'booking'
