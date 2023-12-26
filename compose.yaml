@@ -5,6 +5,8 @@ services:
       - "5000:5000"
   db:
     image: postgres:16
+    ports:
+      - "5432:5432"
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
