@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, session
 from flask_restful import Api
 from models import db
 from forms import LoginForm, UpdateForm
@@ -28,8 +28,19 @@ def index():
 
         if user is None:
             return render_template('index.html', form=form, error="Unknown User")
+        
+        session["id_user"] = user.id_user
 
-    return render_template('index.html', form=form)
+        return redirect(url_for("/dashboard"))
+
+    return render_template('/templates/login.html', form=form)
+
+@app.route('/dashboard')
+def dashboard():
+    # if not session["id_user"]:
+    #     return redirect(url_for("/"))
+
+    return render_template('/templates/dashboard.html')
 
 if __name__ == '__main__':
     app.run(host="localhost", port=5001, debug=True)
