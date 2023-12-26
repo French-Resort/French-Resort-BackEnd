@@ -31,15 +31,13 @@ class BookingService:
             booking: Booking = Booking.query.get(booking_id)
 
             if not booking:
-                return False
+                raise ValueError('Booking not found')
         
             booking.check_in_date = check_in_date
             booking.check_out_date = check_out_date
             booking.guest_id = guest_id
             booking.room_id = room_id
             db.session.commit()
-
-            return True
         except Exception as e:
             db.session.rollback()
             raise e
@@ -50,7 +48,7 @@ class BookingService:
             booking: Booking = Booking.query.get(booking_id)
 
             if not booking:
-                return False
+                raise ValueError('Booking not found')
             
             db.session.delete(booking)
             db.session.commit()

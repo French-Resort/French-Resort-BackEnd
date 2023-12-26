@@ -5,3 +5,4 @@ class User(db.Model):
     id_user = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
