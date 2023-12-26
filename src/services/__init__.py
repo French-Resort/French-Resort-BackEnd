@@ -1,2 +1,2 @@
 from services.BookingService import BookingService
-from services.UserService import UserService
+from services.GuestService import GuestService

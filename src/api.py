@@ -1,52 +1,67 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import  Resource
-from services import BookingService, UserService
+from services import BookingService, GuestService
+from models import Booking
+from werkzeug.security import check_password_hash
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 class LoginResource(Resource):
     def post(self):
         data = request.get_json()
-        user_email = data.get('user_email')
-        user_password = data.get('user_password')
+        email = data.get('email')
+        password = data.get('password')
 
-        user = UserService.get_user_by_email_password(user_email, user_password)
+        print("Data: ", data)
+        guest = GuestService.get_guest_by_email(email)
 
-        if user:
-            return jsonify({'message': 'Login successful', 'user_id': user.user_id})
+        if guest and check_password_hash(guest.password, password):
+            print("guest:", guest)
+
+        if guest and check_password_hash(guest.password, password):
+            return jsonify({'id_user': guest.id_user, 'email': email, 'last_name': guest.last_name, 'first_name': guest.first_name, 'phone_number': guest.phone_number})
         else:
-            return jsonify({'error': 'Invalid email or password'}), 401
+            return { "error": "User or Password invalid" }, 404
 
 class SignUpResource(Resource):
     def post(self):
         data = request.get_json()
-        user_email = data.get('user_email')
-        user_password = data.get('user_password')
+        email = data.get('email')
+        password = data.get('password')
+        last_name = data.get('last_name')
+        first_name = data.get('first_name')
+        phone_number = data.get('phone_number')
 
-        user_id = UserService.create_user(user_email, user_password)
+        guest = GuestService.create_guest(email, password, last_name, first_name, phone_number)
 
-        return jsonify({'message': 'User created successfully', 'user_id': user_id})
+        if not guest:
+            return {'error': 'Guest already exists !'}, 401
+
+        return jsonify({'id_user': guest.id_user, 'email': email, 'last_name': last_name, 'first_name': first_name, 'phone_number': phone_number})
 
 class BookingResource(Resource):
     def get(self, booking_id):
-        booking = BookingService.get_booking(booking_id)
+        booking: Booking = BookingService.get_booking(booking_id)
+
         if booking:
-            return jsonify({'booking_id': booking.booking_id, 'user_id': booking.user_id, 'details': booking.details})
+            return jsonify({'id_booking': booking.id_booking, 'check_in_date': booking.check_in_date, 'check_out_date': booking.check_in_date, 'id_guest': booking.id_guest, 'id_room': booking.id_room})
         else:
-            return jsonify({'error': 'Booking not found'}), 404
+            return {'error': 'Booking not found'}, 404
 
     def post(self):
         data = request.get_json()
-        user_id = data.get('user_id')
-        details = data.get('details')
+        check_in_date = data.get('check_in_date')
+        check_out_date = data.get('check_out_date')
+        id_guest = data.get('id_guest')
+        id_room = data.get('id_room')
 
-        booking_id = BookingService.create_booking(user_id, details)
+        id_booking = BookingService.create_booking(check_in_date, check_out_date, id_guest, id_room)
 
-        return jsonify({'message': 'Booking created successfully', 'booking_id': booking_id})
+        return jsonify({'id_booking': id_booking})
 
 class BookingsResource(Resource):
     def get(self):
-        bookings = BookingService.get_all_bookings()
-        booking_list = [{'booking_id': booking.booking_id, 'user_id': booking.user_id, 'details': booking.details}
+        bookings: list[Booking] = BookingService.get_all_bookings()
+        booking_list = [{'id_booking': booking.id_booking, 'check_in_date': booking.check_in_date, 'check_out_date': booking.check_in_date, 'id_guest': booking.id_guest, 'id_guest': booking.id_room}
                         for booking in bookings]
-        return jsonify({'bookings': booking_list})
+        return jsonify({'bookings': booking_list, 'size': len(booking_list)})

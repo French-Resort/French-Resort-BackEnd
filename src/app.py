@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_restful import Api
 from models import db
 from forms import LoginForm, UpdateForm
-from services import UserService
+from services import GuestService
 from api import *
 
 app = Flask(__name__)
@@ -24,7 +24,7 @@ def index():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = UserService.get_user_by_email_password(form.user_email.data, form.user_password.data)
+        user = GuestService.get_guest_by_email_and_password(form.user_email.data, form.user_password.data)
 
         if user is None:
             return render_template('index.html', form=form, error="Unknown User")
@@ -32,4 +32,4 @@ def index():
     return render_template('index.html', form=form)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="localhost", port=5001, debug=True)
