@@ -72,7 +72,8 @@ def update_booking(id_booking):
     if not booking:
         return redirect(url_for("dashboard"))
 
-    rooms: list[Room] = RoomService.get_all_rooms()
+    rooms: list[Room] = RoomService.get_all_rooms_available_from_to_date(booking.check_in_date, booking.check_out_date)
+    rooms.append(RoomService.get_room_by_id())
 
     form = UpdateBookingForm()
     form.room_type.choices = [room.room_type for room in rooms]
@@ -81,11 +82,11 @@ def update_booking(id_booking):
         room: Room = RoomService.get_room_by_id(form.room_type.data)
 
         if not room:
-            return render_template('update_booking.html', form=form, booking=booking)
+            return render_template('pages/update_booking.html', form=form, booking=booking, error="Room doesn't exist")
 
-        BookingService.update_booking(id_booking, form.booking_check_in_date.data, form.booking_check_out_date.data, booking.id_guest, room.id_room)
+        BookingService.update_booking(id_booking, form.check_in_date.data, form.check_out_date.data, booking.id_guest, room.id_room)
 
-    return render_template('update_booking.html', form=form, booking=booking)
+    return render_template('pages/update_booking.html', form=form, booking=booking)
 
 @app.route('/delete_booking/<int:id_booking>', methods=['GET'])
 def delete_booking(id_booking):

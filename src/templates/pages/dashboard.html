@@ -32,19 +32,24 @@
                             <th>Check Out Date</th>
                             <th>Total Price</th>
                             <th>Id Room</th>
-                          </tr>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {% for booking in bookings %}
-                          <tr>
+                        <tr>
                             <td>{{ booking.id_booking }}</td>
                             <td>{{ booking.check_in_date }}</td>
                             <td>{{ booking.check_out_date }}</td>
                             <td>{{ booking.total_price }}</td>
                             <td>{{ booking.id_room }}</td>
-                          </tr>
+                            <td><a href="{{ url_for('update_booking', id_booking=booking.id_booking )}}"
+                                    class="btn btn-primary">Update</a>
+                                    <button class="btn btn-danger" data-id="{{ booking.booking_id }}">Delete</button>
+                            </td>
+                        </tr>
                         {% endfor %}
-                      </tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -52,7 +57,9 @@
 </div>
 {% endblock %}
 {% block scripts %}
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"
+    type="text/javascript"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 <script src="{{ url_for('static', filename='js/dashboardDatatable.js') }}"></script>
