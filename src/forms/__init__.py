@@ -1,2 +1,2 @@
 from forms.LoginForm import LoginForm
-from forms.UpdateForm import UpdateForm
+from forms.UpdateBookingForm import UpdateBookingForm
