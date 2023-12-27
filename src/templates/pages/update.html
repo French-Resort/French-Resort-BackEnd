@@ -35,5 +35,10 @@
         <input class="btn btn-warning" type="reset" value="Reset">
     </form>
     <a href="" class="button">Delete</a>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
