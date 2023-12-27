@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import  Resource
-from services import BookingService, GuestService
-from models import Booking
+from services import BookingService, UserService, GuestService
+from models import Booking, User
 from werkzeug.security import check_password_hash
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -12,16 +12,12 @@ class LoginResource(Resource):
         email = data.get('email')
         password = data.get('password')
 
-        print("Data: ", data)
-        guest = GuestService.get_guest_by_email(email)
+        user: User = UserService.authenticate_user(email, password)
 
-        if guest and check_password_hash(guest.password, password):
-            print("guest:", guest)
-
-        if guest and check_password_hash(guest.password, password):
-            return jsonify({'id_user': guest.id_user, 'email': email, 'last_name': guest.last_name, 'first_name': guest.first_name, 'phone_number': guest.phone_number})
+        if user:
+            return jsonify({ 'id_user': user.id_user })
         else:
-            return { "error": "User or Password invalid" }, 404
+            return { "error": "Email or Password invalid" }, 401
 
 class SignUpResource(Resource):
     def post(self):
@@ -41,7 +37,7 @@ class SignUpResource(Resource):
 
 class BookingResource(Resource):
     def get(self, booking_id):
-        booking: Booking = BookingService.get_booking(booking_id)
+        booking: Booking = BookingService.get_booking_by_id(booking_id)
 
         if booking:
             return jsonify({'id_booking': booking.id_booking, 'check_in_date': booking.check_in_date, 'check_out_date': booking.check_in_date, 'id_guest': booking.id_guest, 'id_room': booking.id_room})
