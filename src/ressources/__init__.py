@@ -1,5 +1,5 @@
 from ressources.BookingResource import BookingResource
 from ressources.BookingsResource import BookingsResource
-from ressources.DbRessource import DbRessource
+from ressources.DbResource import DbResource
 from ressources.LoginResource import LoginResource
-from ressources.SignUpRessource import SignUpResource
+from ressources.SignUpResource import SignUpResource

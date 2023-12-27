@@ -3,7 +3,7 @@ from flask_restful import  Resource
 from services import AdminService
 from models import db
 
-class DbRessource(Resource):
+class DbResource(Resource):
     def post(self):
         db.drop_all()
         db.create_all()
