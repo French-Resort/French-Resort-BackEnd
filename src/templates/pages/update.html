@@ -1,0 +1,39 @@
+{% extends "indexWithNav.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Update Booking</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label class="form-label" for="id_booking">Booking ID:</label>
+            <input type="text" class="form-control" value="{{ booking.id_booking }}" readonly>
+        </div>
+        
+        <div class="form-group">
+            {{ form.check_in_date.label(class="form-label") }}
+            {{ form.check_in_date(class="form-control", required="required") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.check_out_date.label(class="form-label") }}
+            {{ form.check_out_date(class="form-control", required="required") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.total_price.label(class="form-label") }}
+            {{ form.total_price(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_room">Room Type:</label>
+            {{ form.id_room(class="form-control", required="required") }}
+        </div>
+
+        {{ form.submit(class="btn btn-success") }}
+        <input class="btn btn-warning" type="reset" value="Reset">
+    </form>
+    <a href="" class="button">Delete</a>
+</div>
+{% endblock %}
