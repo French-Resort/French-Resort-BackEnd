@@ -19,6 +19,11 @@
                     {{ form.submit(class="btn btn-primary") }}
                 </div>
             </form>
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
