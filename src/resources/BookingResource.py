@@ -4,8 +4,8 @@ from services import BookingService
 from models import Booking
 
 class BookingResource(Resource):
-    def get(self, booking_id):
-        booking: Booking = BookingService.get_booking_by_id(booking_id)
+    def get(self, id_booking):
+        booking: Booking = BookingService.get_booking_by_id(id_booking)
 
         if booking:
             return jsonify({'id_booking': booking.id_booking, 'check_in_date': booking.check_in_date, 'check_out_date': booking.check_in_date, 'id_guest': booking.id_guest, 'id_room': booking.id_room})

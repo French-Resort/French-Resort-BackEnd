@@ -3,7 +3,7 @@ from flask_restful import Api
 from models import db, Booking, Room
 from forms import LoginForm, UpdateBookingForm
 from services import GuestService, BookingService, RoomService, AdminService
-from ressources import BookingsResource, BookingResource, DbResource, LoginResource, SignUpResource 
+from resources import BookingsResource, BookingResource, DbResource, LoginResource, SignUpResource 
 
 app = Flask(__name__)
 api_bp = Blueprint('api', __name__, url_prefix='/api')    
@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 api.add_resource(LoginResource, '/login')
 api.add_resource(SignUpResource, '/signup')
-api.add_resource(BookingResource, '/booking/<int:booking_id>', '/booking')
+api.add_resource(BookingResource, '/booking/<int:id_booking>', '/booking')
 api.add_resource(BookingsResource, '/bookings')
 api.add_resource(DbResource, '/db_init')
 app.register_blueprint(api_bp)
