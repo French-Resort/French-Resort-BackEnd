@@ -1,6 +1,7 @@
-from models.alchemy import db
-from models.Guest import Guest
+import datetime
+from sqlalchemy import func
 from werkzeug.security import generate_password_hash
+from models import db, Guest, Booking, Room
 
 class GuestService:
     @staticmethod
@@ -28,9 +29,9 @@ class GuestService:
             raise e
 
     @staticmethod
-    def get_guest_by_id(guest_id):
+    def get_guest_by_id(id_guest):
         try:
-            return Guest.query.get(guest_id)
+            return Guest.query.get(id_guest)
         except Exception as e:
             raise e
         
@@ -42,9 +43,9 @@ class GuestService:
             raise e
 
     @staticmethod
-    def update_guest(guest_id, email, password, last_name, first_name, phone_number):
+    def update_guest(id_guest, email, password, last_name, first_name, phone_number):
         try:
-            guest: Guest = Guest.query.get(guest_id)
+            guest: Guest = Guest.query.get(id_guest)
             if guest:
                 guest.email = email
                 guest.password = generate_password_hash(password)
@@ -59,9 +60,9 @@ class GuestService:
             raise e
 
     @staticmethod
-    def delete_guest(guest_id):
+    def delete_guest(id_guest):
         try:
-            guest = Guest.query.get(guest_id)
+            guest = Guest.query.get(id_guest)
             if guest:
                 db.session.delete(guest)
                 db.session.commit()
