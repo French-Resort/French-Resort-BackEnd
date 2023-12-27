@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS guest (
 CREATE TABLE IF NOT EXISTS room (
     id_room VARCHAR(50) PRIMARY KEY,
     room_type VARCHAR(50) NOT NULL,
-    price_per_night MONEY NOT NULL,
+    price_per_night NUMERIC(10, 2) NOT NULL,
     max_guests SMALLINT NOT NULL
 );
 
@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS booking (
     id_booking SERIAL PRIMARY KEY,
     check_in_date DATE NOT NULL,
     check_out_date DATE NOT NULL,
+    total_price NUMERIC(10, 2) NOT NULL,
     id_room VARCHAR(50) NOT NULL,
     id_guest INTEGER NOT NULL,
     CONSTRAINT fk_room FOREIGN KEY (id_room) REFERENCES room (id_room),
