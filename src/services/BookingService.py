@@ -10,7 +10,8 @@ class BookingService:
             if not room:
                 raise ValueError('Room not found')
 
-            total_price = (check_out_date - check_in_date).days * room.price_per_night
+            
+            total_price = ((datetime.datetime.strptime(check_out_date, '%Y-%m-%d') - datetime.datetime.strptime(check_in_date, '%Y-%m-%d')).days) * float(room.price_per_night)
 
             new_booking = Booking(
                 check_in_date=check_in_date,
