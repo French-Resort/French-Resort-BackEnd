@@ -1,4 +1,5 @@
-from models import db, Room
+from services.BookingService import BookingService
+from models import db, Room, Booking
 
 class RoomService:
     @staticmethod
@@ -34,6 +35,16 @@ class RoomService:
     def get_all_rooms():
         try:
             return Room.query.all()
+        except Exception as e:
+            raise e
+        
+    @staticmethod
+    def get_all_rooms_available(from_date, to_date):
+        try:
+            bookings_between_check_in_and_check_out_date: list[Booking] = BookingService.get_all_bookings_between_check_in_and_check_out_date(from_date, to_date)
+            id_rooms_booked_in_range = [booking.id_room for booking in bookings_between_check_in_and_check_out_date]
+
+            return Room.query.filter(Room.id_room.notin_(id_rooms_booked_in_range)).all()
         except Exception as e:
             raise e
 

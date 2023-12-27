@@ -37,6 +37,10 @@ class BookingService:
         return Booking.query.all()
     
     @staticmethod
+    def get_all_bookings_between_check_in_and_check_out_date(check_in_date, check_out_date):
+        return Booking.query.filter(Booking.check_in_date >= check_in_date, Booking.check_out_date <= check_out_date).all()
+    
+    @staticmethod
     def get_total_guests_this_month():
         try:
             first_day_of_month = datetime.date.today().replace(day=1)

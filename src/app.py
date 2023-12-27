@@ -2,8 +2,8 @@ from flask import Flask, render_template, redirect, url_for, session, Blueprint
 from flask_restful import Api
 from models import db, Booking, Room
 from forms import LoginForm, UpdateBookingForm
-from services import GuestService, BookingService, RoomService, AdminService
-from resources import BookingsResource, BookingResource, DbResource, LoginResource, SignUpResource 
+from services import BookingService, RoomService, AdminService
+from resources import *
 
 app = Flask(__name__)
 api_bp = Blueprint('api', __name__, url_prefix='/api')    
@@ -14,11 +14,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
-api.add_resource(LoginResource, '/login')
-api.add_resource(SignUpResource, '/signup')
-api.add_resource(BookingResource, '/booking/<int:id_booking>', '/booking')
-api.add_resource(BookingsResource, '/bookings')
-api.add_resource(DbResource, '/db_init')
+api.add_resource(LoginResource, '/login', 'api_login')
+api.add_resource(SignUpResource, '/signup', 'api_signup')
+api.add_resource(BookingResource, '/booking/<int:id_booking>', 'api_booking_by_id')
+api.add_resource(BookingsResource, '/bookings', 'api_bookings')
+api.add_resource(RoomResource, '/room', 'api_room')
+api.add_resource(RoomsAvailableResource, '/rooms/available', 'api_rooms_available')
+api.add_resource(DbResource, '/db_init', 'api_db_init')
 app.register_blueprint(api_bp)
 
 @app.route('/', methods = ['POST', 'GET'])
