@@ -8,7 +8,7 @@
 
         <div class="form-group">
             <label class="form-label" for="id_booking">Booking ID:</label>
-            <input type="text" class="form-control" value="{{ booking.id_booking }}" readonly>
+            <input type="text" class="form-control disabled" value="{{ booking.id_booking }}" readonly>
         </div>
         
         <div class="form-group">
@@ -27,8 +27,8 @@
         </div>
 
         <div class="form-group">
-            <label for="id_room">Room Type:</label>
-            {{ form.id_room(class="form-control", required="required") }}
+            {{ form.room_type.label }}
+            {{ form.room_type(class="form-control", required="required") }}
         </div>
 
         {{ form.submit(class="btn btn-success") }}
