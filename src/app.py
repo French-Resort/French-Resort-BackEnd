@@ -1,11 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, session, Blueprint
+from flask_cors import CORS
 from flask_restful import Api
 from models import db, Booking, Room
 from forms import LoginForm, UpdateBookingForm
 from services import BookingService, RoomService, AdminService
 from resources import *
 
+
 app = Flask(__name__)
+CORS(app)
 api_bp = Blueprint('api', __name__, url_prefix='/api')    
 api = Api(api_bp)
 
@@ -19,6 +22,7 @@ api.add_resource(SignUpResource, '/signup', 'api_signup')
 api.add_resource(BookingResource, '/booking/<int:id_booking>', 'api_booking_by_id')
 api.add_resource(BookingsResource, '/bookings', 'api_bookings')
 api.add_resource(RoomResource, '/room', 'api_room')
+api.add_resource(RoomsResource, '/rooms', 'api_rooms')
 api.add_resource(RoomsAvailableResource, '/rooms/available', 'api_rooms_available')
 api.add_resource(DbResource, '/db_init', 'api_db_init')
 app.register_blueprint(api_bp)
