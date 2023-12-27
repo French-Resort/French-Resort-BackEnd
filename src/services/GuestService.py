@@ -1,7 +1,5 @@
-import datetime
-from sqlalchemy import func
-from werkzeug.security import generate_password_hash
-from models import db, Guest, Booking, Room
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, Guest
 
 class GuestService:
     @staticmethod
@@ -71,3 +69,12 @@ class GuestService:
         except Exception as e:
             db.session.rollback()
             raise e
+        
+    @staticmethod
+    def authenticate_guest(email, password):
+        guest: Guest = Guest.query.filter_by(email=email).first()
+
+        if guest and check_password_hash(guest.password, password):
+            return guest
+
+        return None
