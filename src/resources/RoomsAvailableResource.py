@@ -10,12 +10,10 @@ class RoomsAvailableResource(Resource):
         from_date = args.get('from')
         to_date = args.get('to')
 
-        rooms = []
-
-        if from_date and to_date: 
-            rooms: list[Room] = RoomService.get_all_rooms_available(from_date, to_date)
-        else:
-            rooms: list[Room] = RoomService.get_all_rooms()
+        if not from_date or not to_date:
+            return {'error': 'from and to are required query parameter'}
+            
+        rooms: list[Room] = RoomService.get_all_rooms_available_from_to_date(from_date, to_date)
 
         rooms_json = [{'id_room': room.id_room, 'price_per_night': room.price_per_night, 'max_guests': room.max_guests, 'room_type': room.room_type} for room in rooms]
         return jsonify(rooms_json)

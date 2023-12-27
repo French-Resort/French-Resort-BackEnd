@@ -4,4 +4,5 @@ from resources.DbResource import DbResource
 from resources.LoginResource import LoginResource
 from resources.SignUpResource import SignUpResource
 from resources.RoomResource import RoomResource
+from resources.RoomsResource import RoomsResource
 from resources.RoomsAvailableResource import RoomsAvailableResource

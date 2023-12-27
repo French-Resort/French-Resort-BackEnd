@@ -39,7 +39,7 @@ class RoomService:
             raise e
         
     @staticmethod
-    def get_all_rooms_available(from_date, to_date):
+    def get_all_rooms_available_from_to_date(from_date, to_date):
         try:
             bookings_between_check_in_and_check_out_date: list[Booking] = BookingService.get_all_bookings_between_check_in_and_check_out_date(from_date, to_date)
             id_rooms_booked_in_range = [booking.id_room for booking in bookings_between_check_in_and_check_out_date]
