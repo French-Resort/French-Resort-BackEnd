@@ -8,7 +8,7 @@ class RoomService:
             existing_room = Room.query.get(id_room)
 
             if existing_room:
-                raise ValueError('Room with this ID already exists')
+                raise NameError('Room with this ID already exists')
 
             new_room = Room(
                 id_room=id_room,
@@ -54,7 +54,7 @@ class RoomService:
             room = Room.query.get(id_room)
 
             if not room:
-                raise ValueError('Room not found')
+                raise NameError('Room not found')
 
             room.room_type = room_type
             room.price_per_night = price_per_night
@@ -72,7 +72,7 @@ class RoomService:
             room = Room.query.get(id_room)
 
             if not room:
-                raise ValueError('Room not found')
+                raise NameError('Room not found')
 
             db.session.delete(room)
             db.session.commit()

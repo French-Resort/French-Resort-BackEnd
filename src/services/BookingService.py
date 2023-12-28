@@ -1,6 +1,7 @@
 import datetime
 from sqlalchemy import func
 from models import db, Booking, Room
+
 class BookingService:
     @staticmethod
     def create_booking(check_in_date, check_out_date, id_guest, id_room):
@@ -8,10 +9,22 @@ class BookingService:
             room: Room = Room.query.get(id_room)
 
             if not room:
-                raise ValueError('Room not found')
-
+                raise NameError('Room not found')
             
-            total_price = ((datetime.datetime.strptime(check_out_date, '%Y-%m-%d') - datetime.datetime.strptime(check_in_date, '%Y-%m-%d')).days) * float(room.price_per_night)
+            bookings_between_check_in_and_check_out_date: list[Booking] = BookingService.get_all_bookings_between_check_in_and_check_out_date(check_in_date, check_out_date)
+            id_rooms_booked_in_range = [booking.id_room for booking in bookings_between_check_in_and_check_out_date]
+            available_rooms: list[Room] = Room.query.filter(Room.id_room.notin_(id_rooms_booked_in_range)).all()
+
+            if room not in available_rooms:
+                raise ValueError('Room is already booked during this period')
+
+            check_in_date = datetime.datetime.strptime(check_in_date, '%Y-%m-%d')
+            check_out_date = datetime.datetime.strptime(check_out_date, '%Y-%m-%d')
+            
+            if check_in_date > check_out_date:
+                raise ValueError('Check in date is after Check out date')
+
+            total_price = ((check_out_date - check_in_date).days) * float(room.price_per_night)
 
             new_booking = Booking(
                 check_in_date=check_in_date,
@@ -84,14 +97,28 @@ class BookingService:
             booking: Booking = Booking.query.get(id_booking)
 
             if not booking:
-                raise ValueError('Booking not found')
+                raise ('Booking not found')
             
             room: Room = Room.query.get(id_room)
 
             if not room:
-                raise ValueError('Room not found')
+                raise NameError('Room not found')
+                      
+            if booking.id_room != id_room: 
+                bookings_between_check_in_and_check_out_date: list[Booking] = BookingService.get_all_bookings_between_check_in_and_check_out_date(check_in_date, check_out_date)
+                id_rooms_booked_in_range = [booking.id_room for booking in bookings_between_check_in_and_check_out_date]
+                available_rooms: list[Room] = Room.query.filter(Room.id_room.notin_(id_rooms_booked_in_range)).all()
 
-            total_price = (check_out_date - check_in_date).days * room.price_per_night
+                if room not in available_rooms:
+                    raise ValueError('Room is already booked during this period')
+            
+            check_in_date = datetime.datetime.strptime(check_in_date, '%Y-%m-%d')
+            check_out_date = datetime.datetime.strptime(check_out_date, '%Y-%m-%d')
+            
+            if check_in_date > check_out_date:
+                raise ValueError('Check in date is after Check out date')
+
+            total_price = ((check_out_date - check_in_date).days) * float(room.price_per_night)
         
             booking.check_in_date = check_in_date
             booking.check_out_date = check_out_date
@@ -111,7 +138,7 @@ class BookingService:
             booking: Booking = Booking.query.get(id_booking)
 
             if not booking:
-                raise ValueError('Booking not found')
+                raise NameError('Booking not found')
             
             db.session.delete(booking)
             db.session.commit()
