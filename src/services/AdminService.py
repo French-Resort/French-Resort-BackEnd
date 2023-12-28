@@ -9,7 +9,7 @@ class AdminService:
             existing_user = Admin.query.filter_by(email=email).first()
 
             if existing_user:
-                raise ValueError('Admin with this email already exists')
+                raise NameError('Admin with this email already exists')
 
             hashed_password = generate_password_hash(password)
             new_admin = Admin(
@@ -51,7 +51,7 @@ class AdminService:
             admin: Admin = Admin.query.get(id_admin)
 
             if not admin:
-                raise ValueError('Admin not found')
+                raise NameError('Admin not found')
 
             hashed_password = generate_password_hash(password)
             admin.email = email
@@ -69,7 +69,7 @@ class AdminService:
             user = Admin.query.get(id_admin)
 
             if not user:
-                raise ValueError('Admin not found')
+                raise NameError('Admin not found')
 
             db.session.delete(user)
             db.session.commit()

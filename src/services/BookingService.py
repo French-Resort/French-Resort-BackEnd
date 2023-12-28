@@ -8,10 +8,15 @@ class BookingService:
             room: Room = Room.query.get(id_room)
 
             if not room:
-                raise ValueError('Room not found')
+                raise NameError('Room not found')
 
+            check_in_date = datetime.datetime.strptime(check_in_date, '%Y-%m-%d')
+            check_out_date = datetime.datetime.strptime(check_out_date, '%Y-%m-%d')
             
-            total_price = ((datetime.datetime.strptime(check_out_date, '%Y-%m-%d') - datetime.datetime.strptime(check_in_date, '%Y-%m-%d')).days) * float(room.price_per_night)
+            if check_in_date > check_out_date:
+                raise ValueError('Check in date is after Check out date')
+
+            total_price = ((check_in_date - check_out_date).days) * float(room.price_per_night)
 
             new_booking = Booking(
                 check_in_date=check_in_date,
@@ -84,14 +89,20 @@ class BookingService:
             booking: Booking = Booking.query.get(id_booking)
 
             if not booking:
-                raise ValueError('Booking not found')
+                raise ('Booking not found')
             
             room: Room = Room.query.get(id_room)
 
             if not room:
-                raise ValueError('Room not found')
+                raise NameError('Room not found')
+            
+            check_in_date = datetime.datetime.strptime(check_in_date, '%Y-%m-%d')
+            check_out_date = datetime.datetime.strptime(check_out_date, '%Y-%m-%d')
+            
+            if check_in_date > check_out_date:
+                raise ValueError('Check in date is after Check out date')
 
-            total_price = (check_out_date - check_in_date).days * room.price_per_night
+            total_price = ((check_in_date - check_out_date).days) * float(room.price_per_night)
         
             booking.check_in_date = check_in_date
             booking.check_out_date = check_out_date
@@ -111,7 +122,7 @@ class BookingService:
             booking: Booking = Booking.query.get(id_booking)
 
             if not booking:
-                raise ValueError('Booking not found')
+                raise NameError('Booking not found')
             
             db.session.delete(booking)
             db.session.commit()
