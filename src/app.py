@@ -18,15 +18,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
-api.add_resource(LoginResource, '/login', 'api_login')
-api.add_resource(SignUpResource, '/signup', 'api_signup')
-api.add_resource(BookingResource, '/booking', 'api_booking')
-api.add_resource(BookingByIdResource, '/booking/<int:id_booking>', 'api_booking_by_id')
-api.add_resource(BookingsResource, '/bookings', 'api_bookings')
-api.add_resource(RoomResource, '/room', 'api_room')
-api.add_resource(RoomsResource, '/rooms', 'api_rooms')
-api.add_resource(RoomsAvailableResource, '/rooms/available', 'api_rooms_available')
-api.add_resource(DbResource, '/db_init', 'api_db_init')
+api.add_resource(LoginResource, '/login', endpoint='login')
+api.add_resource(SignUpResource, '/signup', endpoint='signup')
+api.add_resource(BookingResource, '/booking', endpoint='booking')
+api.add_resource(BookingByIdResource, '/booking/<int:id_booking>', endpoint='booking_by_id')
+api.add_resource(BookingsResource, '/bookings', endpoint='bookings')
+api.add_resource(RoomResource, '/room', endpoint='room')
+api.add_resource(RoomsResource, '/rooms', endpoint='rooms')
+api.add_resource(RoomsAvailableResource, '/rooms/available', endpoint='rooms_available')
+api.add_resource(DbResource, '/db_init', endpoint='db_init')
 app.register_blueprint(api_bp)
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -71,43 +71,49 @@ def update_booking(id_booking):
     booking: Booking = BookingService.get_booking_by_id(id_booking)
 
     if not booking:
-        return redirect(url_for("dashboard"))
-
-    rooms: list[Room] = RoomService.get_all_rooms_available_from_to_date(booking.check_in_date, booking.check_out_date)
-    rooms.append(RoomService.get_room_by_id(booking.id_room))
+        return redirect(url_for("dashboard"))    
+    
+    current_room: Room = RoomService.get_room_by_id(booking.id_room)
 
     if request.method == "POST" :
         form = UpdateBookingForm(request.form)
+        rooms: list[Room] = RoomService.get_all_rooms_available_from_to_date(form.check_in_date.data.strftime('%Y-%m-%d'), form.check_out_date.data.strftime('%Y-%m-%d'))
+        
+        if current_room not in rooms: 
+            rooms.append(current_room)
+
+        form.id_room.choices = [(room.id_room, f'{room.id_room} - {room.room_type}') for room in rooms]
     else:
         form = UpdateBookingForm()
         form.check_in_date.data = booking.check_in_date
         form.check_out_date.data = booking.check_out_date
-
-    form.id_room.choices = [(room.id_room, f'{room.id_room} - {room.room_type}') for room in rooms]
+        form.id_room.data = booking.id_room
+        
+        rooms: list[Room] = RoomService.get_all_rooms_available_from_to_date(booking.check_in_date, booking.check_out_date)
+        if current_room not in rooms: 
+            rooms.append(current_room)
+        
+        form.id_room.choices = [(room.id_room, f'{room.id_room} - {room.room_type}') for room in rooms]
 
     if form.validate_on_submit(): 
-        url = url_for('api_booking_by_id', id_booking=booking.id_booking)
+        url = f"http://localhost:5001/api/booking/{booking.id_booking}"
         headers = {"Content-Type": "application/json"}
 
         try:
-            data = {
-                "check_in_date": form.check_in_date.data,
-                "check_out_date": form.check_out_date.data,
+            json = {
+                "check_in_date": form.check_in_date.data.strftime('%Y-%m-%d'),
+                "check_out_date": form.check_out_date.data.strftime('%Y-%m-%d'),
                 "id_guest": booking.id_guest,
-                "id_room": form.id_room
+                "id_room": form.id_room.data
             }
-            response = requests.put(url, headers=headers, json=data)
+            response = requests.put(url, headers=headers, json=json)
             response.raise_for_status()
-
-            result = response.json()
-            print(result)
-
         except requests.exceptions.RequestException as err:
-            return render_template('pages/update_booking.html', form=form, booking=booking, error=err.strerror)
+            return render_template('pages/updateBooking.html', form=form, booking=booking, error=err.response.json().get('error'))
 
         return redirect(url_for("dashboard"))
 
-    return render_template('pages/update_booking.html', form=form, booking=booking)
+    return render_template('pages/updateBooking.html', form=form, booking=booking)
 
 if __name__ == '__main__':
     app.run(host="localhost", port=5001, debug=True)

@@ -2,7 +2,6 @@ from flask import jsonify, request
 from flask_restful import  Resource
 from services import BookingService
 from models import Booking
-
 class BookingByIdResource(Resource):
     def get(self, id_booking):
         try:
@@ -12,7 +11,11 @@ class BookingByIdResource(Resource):
             return {'error': v.__str__()}, 404
         
     def put(self, id_booking):
-        check_in_date, check_out_date, id_guest, id_room = request.data
+        data: dict = request.get_json()
+        check_in_date = data.get('check_in_date')
+        check_out_date = data.get('check_out_date')
+        id_guest = data.get('id_guest')
+        id_room = data.get('id_room')
 
         try:
             BookingService.update_booking(id_booking, check_in_date, check_out_date, id_guest, id_room)

@@ -45,7 +45,7 @@
                             <td>{{ booking.id_room }}</td>
                             <td><a href="{{ url_for('update_booking', id_booking=booking.id_booking )}}"
                                     class="btn btn-primary">Update</a>
-                                    <button class="btn btn-danger" data-id="{{ booking.booking_id }}">Delete</button>
+                                    <button class="btn btn-danger delete-btn" data-id="{{ booking.id_booking }}">Delete</button>
                             </td>
                         </tr>
                         {% endfor %}

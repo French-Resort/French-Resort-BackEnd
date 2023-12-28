@@ -82,10 +82,7 @@ class AdminService:
     @staticmethod
     def authenticate_user(email, password):
         admin: Admin = Admin.query.filter_by(email=email).first()
-        print(password)
-        print(admin.password)
-        print(check_password_hash(admin.password, password))
-
+        
         if admin and check_password_hash(admin.password, password):
             return admin
 
