@@ -1,6 +1,6 @@
 import datetime
 from sqlalchemy import func
-from models import db, Booking, Room
+from models import db, Booking, Room, Guest
 
 class BookingService:
     @staticmethod
@@ -41,7 +41,6 @@ class BookingService:
             db.session.rollback()
             raise e
 
-
     @staticmethod
     def get_booking_by_id(id_booking):
         return Booking.query.get(id_booking)
@@ -49,6 +48,14 @@ class BookingService:
     @staticmethod
     def get_all_bookings():
         return Booking.query.all()
+    
+    @staticmethod
+    def get_all_bookings_by_id_guest(id_guest):
+        return Booking.query.join(Guest, Booking.id_guest == Guest.id_guest).filter(Guest.id_guest == id_guest).all()
+    
+    @staticmethod
+    def get_all_bookings_by_id_room(id_room):
+        return Booking.query.join(Room, Booking.id_room == Room.id_room).filter(Room.id_room == id_room).all()
     
     @staticmethod
     def get_all_bookings_between_check_in_and_check_out_date(check_in_date, check_out_date):
