@@ -52,7 +52,7 @@ class GuestService:
                 guest.phone_number = phone_number
                 db.session.commit()
             else:
-                raise ValueError('Guest not found')
+                raise NameError('Guest not found')
         except Exception as e:
             db.session.rollback()
             raise e
@@ -65,7 +65,7 @@ class GuestService:
                 db.session.delete(guest)
                 db.session.commit()
             else:
-                raise ValueError('Guest not found')
+                raise NameError('Guest not found')
         except Exception as e:
             db.session.rollback()
             raise e

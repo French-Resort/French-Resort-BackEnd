@@ -1,6 +1,7 @@
 from resources.BookingResource import BookingResource
 from resources.BookingByIdResource import BookingByIdResource
 from resources.BookingsResource import BookingsResource
+from resources.BookingsByIdGuest import BookingsByIdGuest
 from resources.DbResource import DbResource
 from resources.LoginResource import LoginResource
 from resources.SignUpResource import SignUpResource

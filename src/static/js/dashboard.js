@@ -1,19 +1,18 @@
 $(document).ready( function () {
     $('#dataTable').DataTable();
 
-    $('.cancel-btn').click(function() {
+    $('#dataTable').on('click', '.delete-btn', function() {
         const bookingId = $(this).data('id');
+        const row = $(this).closest('tr');
 
-        if(confirm("Are you sure you want to cancel this booking?")) {
+        if(confirm("Are you sure you want to delete this booking?")) {
             $.ajax({
-                url: "{{urlfor('url_for('update_booking', id_booking=booking.id_booking ')}}",
-                method: 'POST',
+                url: `http://localhost:5001/api/booking/${bookingId}`,
+                method: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({ booking_id: bookingId }),
                 success: function(response) {
-                    // Remove the booking row from the table
-                    $('#booking-' + bookingId).remove();
-                    alert(response.message); // Or use a more sophisticated method to notify the user
+                    alert(`Booking ${bookingId} removed!`);
+                    $('#dataTable').DataTable().row(row).remove().draw(false);
                 },
                 error: function(xhr, status, error) {
                     console.error("Error: " + error);
