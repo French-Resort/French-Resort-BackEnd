@@ -21,8 +21,8 @@ class BookingService:
             check_in_date = datetime.datetime.strptime(check_in_date, '%Y-%m-%d')
             check_out_date = datetime.datetime.strptime(check_out_date, '%Y-%m-%d')
             
-            if check_in_date > check_out_date:
-                raise ValueError('Check in date is after Check out date')
+            if check_in_date >= check_out_date:
+                raise ValueError('Check in date is after or equal to Check out date')
 
             total_price = ((check_out_date - check_in_date).days) * float(room.price_per_night)
 
@@ -122,8 +122,8 @@ class BookingService:
             check_in_date = datetime.datetime.strptime(check_in_date, '%Y-%m-%d')
             check_out_date = datetime.datetime.strptime(check_out_date, '%Y-%m-%d')
             
-            if check_in_date > check_out_date:
-                raise ValueError('Check in date is after Check out date')
+            if check_in_date >= check_out_date:
+                raise ValueError('Check in date is after or equal to Check out date')
 
             total_price = ((check_out_date - check_in_date).days) * float(room.price_per_night)
         
