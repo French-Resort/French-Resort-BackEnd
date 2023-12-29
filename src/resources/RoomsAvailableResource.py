@@ -11,7 +11,7 @@ class RoomsAvailableResource(Resource):
         to_date = args.get('to')
 
         if not from_date or not to_date:
-            return {'error': 'from and to are required query parameter'}
+            return {'error': 'from and to are required query parameter'}, 400
             
         rooms: list[Room] = RoomService.get_all_rooms_available_from_to_date(from_date, to_date)
 

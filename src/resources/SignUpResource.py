@@ -12,9 +12,9 @@ class SignUpResource(Resource):
         first_name = data.get('first_name')
         phone_number = data.get('phone_number')
 
-        guest: Guest = GuestService.create_guest(email, password, last_name, first_name, phone_number)
+        try:
+            guest: Guest = GuestService.create_guest(email, password, last_name, first_name, phone_number)
 
-        if not guest:
-            return {'error': 'Guest already exists !'}, 401
-
-        return jsonify({'id_guest': guest.id_guest, 'email': email, 'last_name': last_name, 'first_name': first_name, 'phone_number': phone_number})
+            return jsonify({'id_guest': guest.id_guest, 'email': email, 'last_name': last_name, 'first_name': first_name, 'phone_number': phone_number})
+        except ValueError as v:
+            return {'error': v.__str__()}, 400
