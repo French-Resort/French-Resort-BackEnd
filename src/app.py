@@ -32,13 +32,15 @@ app.register_blueprint(api_bp)
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
+    if session.get("id_admin"):
+        return redirect(url_for("dashboard"))
+    
     form = LoginForm()
 
     if form.validate_on_submit():
         admin = AdminService.authenticate_user(form.user_email.data, form.user_password.data)
 
         if not admin:
-            print(admin)
             return render_template('/pages/login.html', form=form, error="Invalid email or password")
         
         session["id_admin"] = admin.id_admin
@@ -50,7 +52,7 @@ def index():
 @app.route('/logout', methods = ['GET'])
 def logout():
     session["id_admin"] = None
-    return redirect(url_for("login"))
+    return redirect("/")
 
 @app.route('/dashboard', methods = ['GET'])
 def dashboard():
@@ -97,22 +99,11 @@ def update_booking(id_booking):
         form.id_room.choices = [(room.id_room, f'{room.id_room} - {room.room_type}') for room in rooms]
 
     if form.validate_on_submit(): 
-        url = f"http://localhost:5001/api/booking/{booking.id_booking}"
-        headers = {"Content-Type": "application/json"}
-
         try:
-            json = {
-                "check_in_date": form.check_in_date.data.strftime('%Y-%m-%d'),
-                "check_out_date": form.check_out_date.data.strftime('%Y-%m-%d'),
-                "id_guest": booking.id_guest,
-                "id_room": form.id_room.data
-            }
-            response = requests.put(url, headers=headers, json=json)
-            response.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            return render_template('pages/updateBooking.html', form=form, booking=booking, error=err.response.json().get('error'))
-
-        return redirect(url_for("dashboard"))
+            booking: Booking = BookingService.update_booking(booking.id_booking, form.check_in_date.data.strftime('%Y-%m-%d'), form.check_out_date.data.strftime('%Y-%m-%d'), booking.id_guest, form.id_room.data)
+            return redirect(url_for("dashboard"))
+        except Exception as e:
+            return render_template('pages/updateBooking.html', form=form, booking=booking, error=e.__str__())
 
     return render_template('pages/updateBooking.html', form=form, booking=booking)
 

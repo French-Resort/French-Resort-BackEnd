@@ -4,7 +4,7 @@ from services import AdminService, RoomService
 from models import db
 
 class DbResource(Resource):
-    def post(self):
+    def get(self):
         db.drop_all()
         db.create_all()
         
