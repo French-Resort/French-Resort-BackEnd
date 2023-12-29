@@ -9,7 +9,7 @@ class GuestService:
             hashed_password = generate_password_hash(password)
 
             if existing_guest:
-                return None
+                raise ValueError("Already existed guest")
         
             new_guest = Guest(email=email, password=hashed_password, last_name=last_name, first_name=first_name, phone_number=phone_number)
             db.session.add(new_guest)
