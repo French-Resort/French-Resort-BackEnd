@@ -15,7 +15,7 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 api = Api(api_bp)
 
 app.config['SECRET_KEY'] = 'YourSecretKey'
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("POSTGRES_USER", default="postgres")}:{os.getenv("POSTGRES_PASSWORD", default="postgres")}@{os.getenv("POSTGRES_HOST", default="localhost")}/french_resort'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("POSTGRES_USER", default="postgres")}:{os.getenv("POSTGRES_PASSWORD", default="postgres")}@{os.getenv("POSTGRES_HOST", default="localhost")}:{os.getenv("POSTGRES_PORT", default="5432")}/{os.getenv("POSTGRES_DB", default="french_resort")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
