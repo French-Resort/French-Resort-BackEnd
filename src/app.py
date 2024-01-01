@@ -123,4 +123,4 @@ def bdd_init():
         print(f"Error: {err}")
 
 if __name__ == '__main__':
-    app.run(port=os.getenv("PORT", default=5001), debug=True)
+    app.run(host="localhost", port=os.getenv("PORT", default=5001), debug=False)

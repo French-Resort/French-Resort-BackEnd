@@ -9,9 +9,10 @@ COPY requirements.txt requirements.txt
 COPY ./src/ .
 
 RUN pip install -r requirements.txt
+RUN pip install gunicorn
 
 COPY . .
 
 EXPOSE ${PORT}
 
-CMD [ "python", "app.py" ]
+CMD [ "gunicorn", "app:app" ]
