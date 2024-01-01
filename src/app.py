@@ -107,5 +107,19 @@ def update_booking(id_booking):
 
     return render_template('pages/updateBooking.html', form=form, booking=booking)
 
+def bdd_init():
+    url = "http://localhost:5001/api/db_init"
+    headers = {"Content-Type": "application/json"}
+
+    try:
+        response = requests.post(url, headers=headers)
+        response.raise_for_status()  # Raise an error for bad responses (4xx or 5xx)
+
+        result = response.json()
+        print(result)
+
+    except requests.exceptions.RequestException as err:
+        print(f"Error: {err}")
+
 if __name__ == '__main__':
     app.run(host="localhost", port=5001, debug=True)
