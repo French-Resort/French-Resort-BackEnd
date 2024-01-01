@@ -109,7 +109,7 @@ def update_booking(id_booking):
     return render_template('pages/updateBooking.html', form=form, booking=booking)
 
 def bdd_init():
-    url = "http://localhost:5001/api/db_init"
+    url = f"http://localhost:{os.getenv('PORT', default=5001)}/api/db_init"
     headers = {"Content-Type": "application/json"}
 
     try:
