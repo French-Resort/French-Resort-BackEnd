@@ -1,6 +1,11 @@
 services:
   web:
     build: .
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PORT: 5001
     ports:
       - "5001:5001"
   db:
@@ -10,6 +15,7 @@ services:
     restart: always
     environment:
       POSTGRES_DB: french_resort
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data

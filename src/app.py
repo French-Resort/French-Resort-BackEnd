@@ -1,4 +1,5 @@
 import requests
+import os
 from flask import Flask, render_template, redirect, url_for, session, Blueprint, request
 from flask_cors import CORS
 from flask_restful import Api
@@ -14,7 +15,7 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 api = Api(api_bp)
 
 app.config['SECRET_KEY'] = 'YourSecretKey'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/french_resort'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("POSTGRES_USER", default="postgres")}:{os.getenv("POSTGRES_PASSWORD", default="postgres")}@{os.getenv("POSTGRES_HOST", default="localhost")}/french_resort'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -122,4 +123,4 @@ def bdd_init():
         print(f"Error: {err}")
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=5001, debug=True)
+    app.run(host="localhost", port=os.getenv("PORT", default=5001), debug=True)
