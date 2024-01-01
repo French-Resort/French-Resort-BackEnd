@@ -9,6 +9,7 @@ services:
       - "5432:5432"
     restart: always
     environment:
+      POSTGRES_DB: french_resort
       POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
