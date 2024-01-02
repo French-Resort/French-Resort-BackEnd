@@ -33,6 +33,12 @@ app.register_blueprint(api_bp)
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
+    """
+    Handles the home page.
+
+    If the admin is logged in, redirects to the dashboard.
+    If the form is submitted, authenticates the admin.
+    """
     if session.get("id_admin"):
         return redirect(url_for("dashboard"))
     
@@ -52,11 +58,21 @@ def index():
 
 @app.route('/logout', methods = ['GET'])
 def logout():
+    """
+    Handles the logout action.
+
+    Clears the admin session and redirects to the home page.
+    """
     session["id_admin"] = None
     return redirect("/")
 
 @app.route('/dashboard', methods = ['GET'])
 def dashboard():
+    """
+    Renders the dashboard page.
+
+    Retrieves booking information and statistics for display.
+    """
     if not session.get("id_admin"):
         return redirect("/")
 
@@ -69,6 +85,15 @@ def dashboard():
 
 @app.route('/update_booking/<int:id_booking>', methods=['GET', 'POST'])
 def update_booking(id_booking):
+    """
+    Handles updating a booking.
+
+    If the form is submitted, validates and updates the booking.
+    Otherwise, renders the update booking form.
+
+    Args:
+        id_booking (int): The ID of the booking to update.
+    """
     if not session.get("id_admin"):
         return redirect(url_for("/"))
 
@@ -109,6 +134,9 @@ def update_booking(id_booking):
     return render_template('pages/updateBooking.html', form=form, booking=booking)
 
 def bdd_init():
+    """
+    Initializes the database by making a request to the API endpoint.
+    """
     url = f"http://localhost:{os.getenv('PORT', default=5001)}/api/db_init"
     headers = {"Content-Type": "application/json"}
 

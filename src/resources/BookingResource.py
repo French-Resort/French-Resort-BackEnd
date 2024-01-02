@@ -4,7 +4,21 @@ from services import BookingService
 from models import Booking
 
 class BookingResource(Resource):
+    """
+    Resource for handling operations related to bookings.
+
+    Supports POST request for creating a new booking.
+    """
     def post(self):
+        """
+        Handles POST request for creating a new booking.
+
+        Args:
+            None
+
+        Returns:
+            jsonify: JSON response with booking details or an error message.
+        """
         data: dict = request.get_json()
         check_in_date = data.get('check_in_date')
         check_out_date = data.get('check_out_date')

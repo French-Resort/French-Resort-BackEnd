@@ -4,8 +4,19 @@ from services import GuestService
 from models import Guest
 
 class SignUpResource(Resource):
+    """
+    Resource for handling guest sign-up.
+
+    Supports POST request to create a new guest account.
+    """
     def post(self):
-        data = request.get_json()
+        """
+        Handles POST request to create a new guest account.
+
+        Returns:
+            jsonify: JSON response with details of the created guest account.
+        """
+        data: dict = request.get_json()
         email = data.get('email')
         password = data.get('password')
         last_name = data.get('last_name')

@@ -4,7 +4,18 @@ from services import AdminService, RoomService
 from models import db
 
 class DbResource(Resource):
+    """
+    Resource for initializing the database with default data.
+
+    Supports POST request for dropping and recreating the database tables with default data.
+    """
     def post(self):
+        """
+        Handles POST request for dropping and recreating the database tables with default data.
+
+        Returns:
+            jsonify: JSON response with the ID of the created admin.
+        """
         db.drop_all()
         db.create_all()
         
