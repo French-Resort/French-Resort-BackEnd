@@ -15,7 +15,7 @@ CREATE TABLE guest(
    id_guest SERIAL,
    first_name VARCHAR(50) NOT NULL,
    last_name VARCHAR(50) NOT NULL,
-   phone_number VARCHAR(50) NOT NULL,
+   phone_number VARCHAR(30) NOT NULL,
    email VARCHAR(50) NOT NULL,
    password TEXT NOT NULL,
    PRIMARY KEY(id_guest),
