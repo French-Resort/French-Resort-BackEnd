@@ -34,6 +34,7 @@
                                 <th>Check Out Date</th>
                                 <th>Total Price</th>
                                 <th>Id Room</th>
+                                <th>Id Guest</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -45,6 +46,7 @@
                                 <td>{{ booking.check_out_date }}</td>
                                 <td>{{ booking.total_price }}</td>
                                 <td>{{ booking.id_room }}</td>
+                                <td>{{ booking.id_guest }}</td>
                                 <td><a href="{{ url_for('update_booking', id_booking=booking.id_booking )}}"
                                         class="btn btn-primary">Update</a>
                                         <button class="btn btn-danger delete-btn" data-id="{{ booking.id_booking }}">Delete</button>
