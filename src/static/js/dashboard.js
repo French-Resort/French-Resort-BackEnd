@@ -7,7 +7,7 @@ $(document).ready( function () {
 
         if(confirm("Are you sure you want to delete this booking?")) {
             $.ajax({
-                url: `http://localhost:5001/api/booking/${bookingId}`,
+                url: `/api/booking/${bookingId}`,
                 method: 'DELETE',
                 contentType: 'application/json',
                 success: function(response) {
