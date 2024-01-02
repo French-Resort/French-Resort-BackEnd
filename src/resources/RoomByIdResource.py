@@ -3,7 +3,7 @@ from flask_restful import  Resource
 from services import RoomService
 from models import Room
 
-class RoomResource(Resource):
+class RoomByIdResource(Resource):
     def get(self, id_room):
         room: Room = RoomService.get_room_by_id(id_room)
 
