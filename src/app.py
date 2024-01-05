@@ -1,6 +1,7 @@
 import requests
 import os
 from flask import Flask, render_template, redirect, url_for, session, Blueprint, request
+from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
 from flask_restful import Api
 from models import db, Booking, Room
@@ -13,6 +14,10 @@ app = Flask(__name__)
 CORS(app)
 api_bp = Blueprint('api', __name__, url_prefix='/api')    
 api = Api(api_bp)
+swaggerui_blueprint = get_swaggerui_blueprint(
+    '/api/docs',
+    '/static/docs/openapi.json',
+)
 
 app.config['SECRET_KEY'] = 'YourSecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("POSTGRES_USER", default="postgres")}:{os.getenv("POSTGRES_PASSWORD", default="postgres")}@{os.getenv("POSTGRES_HOST", default="localhost")}:{os.getenv("POSTGRES_PORT", default="5432")}/{os.getenv("POSTGRES_DB", default="french_resort")}'
@@ -30,6 +35,7 @@ api.add_resource(RoomsResource, '/rooms', endpoint='rooms')
 api.add_resource(RoomsAvailableResource, '/rooms/available', endpoint='rooms_available')
 api.add_resource(DbResource, '/db_init', endpoint='db_init')
 app.register_blueprint(api_bp)
+app.register_blueprint(swaggerui_blueprint)
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():

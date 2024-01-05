@@ -1,0 +1,551 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "French Resort",
+    "version": "1.0.0",
+    "description": "This is the API documentation for french resort backend use to interact with the database.\n\nSome useful links:\n- [French Resort repository](https://github.com/French-Resort/French-Resort-BackEnd)\n- [The source API definition for the French resort](https://github.com/French-Resort/French-Resort-BackEnd)",
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/license/mit/"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5001/api/"
+    },
+    {
+      "url": "https://french-resort-backend-production.up.railway.app/api/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Booking",
+      "description": "Everything about Booking"
+    },
+    {
+      "name": "Room",
+      "description": "Everything about Room"
+    },
+    {
+      "name": "User",
+      "description": "Operations about user"
+    },
+    {
+      "name": "DB",
+      "description": "Operations about db"
+    }
+  ],
+  "paths": {
+    "/booking": {
+      "post": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Create a new booking",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Booking"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        }
+      }
+    },
+    "/booking/{id_booking}": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Retrieve booking details by ID",
+        "parameters": [
+          {
+            "name": "id_booking",
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Update a booking by ID",
+        "parameters": [
+          {
+            "name": "id_booking",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/components/schemas/Booking"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Delete a booking by ID",
+        "parameters": [
+          {
+            "name": "id_booking",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        }
+      }
+    },
+    "/bookings/{id_guest}": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Retrieve bookings by guest ID",
+        "parameters": [
+          {
+            "name": "id_guest",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "bookings": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Booking"
+                      }
+                    },
+                    "size": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookings": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "summary": "Retrieve all bookings",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "bookings": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Booking"
+                      }
+                    },
+                    "size": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/room/{id_room}": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Retrieve room details by room ID",
+        "parameters": [
+          {
+            "name": "id_room",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Room not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Delete a room by room ID",
+        "parameters": [
+          {
+            "name": "id_room",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Room not found"
+          }
+        }
+      }
+    },
+    "/rooms/available": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Retrieve available rooms within a specified date range",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/rooms": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Retrieve all rooms",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Authenticate a guest based on provided email and password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed"
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Create a new guest account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "phone_number": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Guest"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/db": {
+      "post": {
+        "tags": [
+          "DB"
+        ],
+        "summary": "Drop and recreate the database tables with default data",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id_admin": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Booking": {
+        "type": "object",
+        "properties": {
+          "id_booking": {
+            "type": "integer"
+          },
+          "check_in_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "check_out_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "total_price": {
+            "type": "number"
+          },
+          "id_guest": {
+            "type": "integer"
+          },
+          "id_room": {
+            "type": "string"
+          }
+        }
+      },
+      "Room": {
+        "type": "object",
+        "properties": {
+          "id_room": {
+            "type": "string"
+          },
+          "price_per_night": {
+            "type": "number"
+          },
+          "max_guests": {
+            "type": "integer"
+          },
+          "room_type": {
+            "type": "string"
+          }
+        }
+      },
+      "Guest": {
+        "type": "object",
+        "properties": {
+          "id_guest": {
+            "type": "integer"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone_number": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
