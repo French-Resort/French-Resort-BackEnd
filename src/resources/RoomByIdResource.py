@@ -9,7 +9,7 @@ class RoomByIdResource(Resource):
 
     Supports GET request to retrieve details of a room by its ID.
     """
-    def get(self, id_room: int):
+    def get(self, id_room: str):
         """
         Handles GET request to retrieve room details by room ID.
 
@@ -26,3 +26,20 @@ class RoomByIdResource(Resource):
             return {'error': 'Room not found'}, 404
         
         return jsonify({'id_room': room.id_room, 'price_per_night': room.price_per_night, 'max_guests': room.max_guests, 'room_type': room.room_type})
+    
+    def delete(self, id_room: str):
+        """
+        Handles DELETE request for deleting a room by ID.
+
+        Args:
+            id_room (str): The ID of the room.
+
+        Returns:
+            jsonify: Empty JSON response or an error message.
+        """
+        try:
+            RoomService.delete_room(id_room)
+
+            return "", 204
+        except NameError as v:
+            return {'error': v.__str__()}, 404

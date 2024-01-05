@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Update Booking</h2>
-    <form id="update-booking-form" method="POST" onsubmit="return confirmUpdate()">
+    <form id="update-booking-form" method="POST" onsubmit="return confirmSubmit('{{ form_action }}', '{{ form_table}}')">
         {{ form.hidden_tag() }}
 
         <div class="form-group">
@@ -39,5 +39,5 @@
 </div>
 {% endblock %}
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/updateBooking.js') }}"></script>
+<script src="{{ url_for('static', filename='js/confirmSubmit.js') }}"></script>
 {% endblock %}
